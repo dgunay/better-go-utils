@@ -49,7 +49,7 @@ func (o Option[T]) Expect(msg string) T {
 
 func (o Option[T]) OkOr(err error) result.Result[T] {
 	if o.IsSome() {
-		return result.Ok[T](o.value)
+		return result.Ok(o.value)
 	}
 
 	return result.Err[T](err)
