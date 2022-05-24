@@ -11,6 +11,14 @@ type Option[T any] struct {
 	isSome bool
 }
 
+func FromPtr[T any](pointer *T) Option[T] {
+	if pointer == nil {
+		return None[T]()
+	}
+
+	return Some(*pointer)
+}
+
 func Some[T any](val T) Option[T] {
 	return Option[T]{value: val, isSome: true}
 }
