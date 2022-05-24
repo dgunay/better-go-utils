@@ -4,38 +4,38 @@ import (
 	"fmt"
 )
 
-type Result[T any, MapTo any] struct {
+type Result[T any] struct {
 	value T
 	err   error
 }
 
-func Wrap[T any, M any](args ...any) Result[T, M] {
+func Wrap[T any](args ...any) Result[T] {
 	val := args[0].(T)
 	err, ok := args[1].(error)
 	if !ok {
 		err = nil
 	}
 
-	return Result[T, M]{value: val, err: err}
+	return Result[T]{value: val, err: err}
 }
 
-func Ok[T any, M any](val T) Result[T, M] {
-	return Result[T, M]{value: val, err: nil}
+func Ok[T any](val T) Result[T] {
+	return Result[T]{value: val, err: nil}
 }
 
-func Err[T any, M any](err error) Result[T, M] {
-	return Result[T, M]{err: err}
+func Err[T any](err error) Result[T] {
+	return Result[T]{err: err}
 }
 
-func (r Result[T, M]) IsError() bool {
+func (r Result[T]) IsError() bool {
 	return r.err != nil
 }
 
-func (r Result[T, M]) IsOk() bool {
+func (r Result[T]) IsOk() bool {
 	return !r.IsError()
 }
 
-func (r Result[T, M]) Unwrap() T {
+func (r Result[T]) Unwrap() T {
 	if r.IsError() {
 		panic(fmt.Sprintf("unwrapped error result: %s", r.err))
 	}
@@ -43,7 +43,7 @@ func (r Result[T, M]) Unwrap() T {
 	return r.value
 }
 
-func (r Result[T, M]) Expect(msg string) T {
+func (r Result[T]) Expect(msg string) T {
 	if r.IsError() {
 		panic(fmt.Sprintf("%s: %s", msg, r.err))
 	}
@@ -51,35 +51,27 @@ func (r Result[T, M]) Expect(msg string) T {
 	return r.value
 }
 
-func (r Result[T, M]) Map(fn func(val T) M) Result[M, any] {
+func Map[T any, U any](r Result[T], fn func(val T) U) Result[U] {
 	if r.IsOk() {
-		return Ok[M, any](fn(r.value))
+		return Ok(fn(r.value))
 	}
 
-	return Err[M, any](r.err)
+	return Err[U](r.err)
 }
 
 // Mostly due to limitations in Go generics (methods can't have type params).
-func (r Result[T, M]) DynMap(fn func(val T) any) Result[any, any] {
+func (r Result[T]) DynMap(fn func(val T) any) Result[any] {
 	if r.IsOk() {
-		return Ok[any, any](fn(r.value))
+		return Ok(fn(r.value))
 	}
 
-	return Result[any, any]{r.value, r.err}
+	return Result[any]{r.value, r.err}
 }
 
-func (r Result[T, M]) MapErr(fn func(err error) error) Result[T, M] {
+func (r Result[T]) MapErr(fn func(err error) error) Result[T] {
 	if r.IsError() {
 		r.err = fn(r.err)
 	}
 
 	return r
-}
-
-func (r Result[T, M]) AndThen(fn func(val T) M) Result[M, any] {
-	if r.IsOk() {
-		return r.Map(fn)
-	}
-
-	return Err[M, any](r.err)
 }
