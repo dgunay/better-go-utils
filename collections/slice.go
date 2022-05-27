@@ -19,7 +19,7 @@ func (s Slice[T]) Len() int {
 	return len(s.data)
 }
 
-func (s Slice[T]) Any(pred func(T) bool) bool {
+func (s Slice[T]) Any(pred func(T) bool) logic.Bool {
 	return Any(s.data, pred)
 }
 
@@ -71,7 +71,7 @@ func (s Slice[T]) First() logic.Option[T] {
 	return logic.Some(s.data[0])
 }
 
-func (s Slice[T]) Empty() bool {
+func (s Slice[T]) Empty() logic.Bool {
 	return s.Len() == 0
 }
 

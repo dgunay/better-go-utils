@@ -1,5 +1,7 @@
 package promise
 
+import "github.com/dgunay/better-go-utils/logic"
+
 type Promise[T any] struct {
 	channel chan T
 	errch   chan error
@@ -22,8 +24,8 @@ func New[T any](fn func() (T, error)) *Promise[T] {
 	return p
 }
 
-func (p Promise[T]) Ready() bool {
-	return p.ready
+func (p Promise[T]) Ready() logic.Bool {
+	return logic.Bool(p.ready)
 }
 
 func (p Promise[T]) Await() (T, error) {

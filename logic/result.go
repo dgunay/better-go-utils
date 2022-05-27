@@ -35,11 +35,11 @@ func Err[T any](err error) Result[T] {
 	return Result[T]{err: err}
 }
 
-func (r Result[T]) IsError() bool {
+func (r Result[T]) IsError() Bool {
 	return r.err != nil
 }
 
-func (r Result[T]) IsOk() bool {
+func (r Result[T]) IsOk() Bool {
 	return !r.IsError()
 }
 

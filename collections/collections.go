@@ -1,7 +1,9 @@
 package collections
 
+import "github.com/dgunay/better-go-utils/logic"
+
 // Any returns true if any element in the collection satisfies the predicate.
-func Any[T any](elems []T, pred func(T) bool) bool {
+func Any[T any](elems []T, pred func(T) bool) logic.Bool {
 	for _, elem := range elems {
 		if pred(elem) {
 			return true

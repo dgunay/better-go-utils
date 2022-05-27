@@ -6,7 +6,7 @@ import (
 
 type Option[T any] struct {
 	value  T
-	isSome bool
+	isSome Bool
 }
 
 func FromPtr[T any](pointer *T) Option[T] {
@@ -25,12 +25,16 @@ func None[T any]() Option[T] {
 	return Option[T]{}
 }
 
-func (o Option[T]) IsSome() bool {
+func (o Option[T]) IsSome() Bool {
 	return o.isSome
 }
 
+func (o Option[T]) IsNone() Bool {
+	return !o.isSome
+}
+
 func (o Option[T]) Unwrap() T {
-	if !o.IsSome() {
+	if o.IsNone() {
 		panic("unwrapped None")
 	}
 
@@ -38,7 +42,7 @@ func (o Option[T]) Unwrap() T {
 }
 
 func (o Option[T]) Expect(msg string) T {
-	if !o.IsSome() {
+	if o.IsNone() {
 		panic(fmt.Sprintf("%s: unwrapped None", msg))
 	}
 
