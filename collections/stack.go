@@ -25,3 +25,7 @@ func (s *Stack[T]) Pop() option.Option[T] {
 		return option.Some(val)
 	})
 }
+
+func (s Stack[T]) Top() option.Option[T] {
+	return s.slice.Last()
+}
