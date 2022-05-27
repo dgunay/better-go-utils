@@ -2,6 +2,8 @@ package result
 
 import (
 	"fmt"
+
+	"github.com/dgunay/better-go-utils/option"
 )
 
 type Result[T any] struct {
@@ -82,4 +84,12 @@ func (r Result[T]) MapErr(fn func(err error) error) Result[T] {
 	}
 
 	return r
+}
+
+func (r Result[T]) Ok() option.Option[T] {
+	if r.IsOk() {
+		return option.Some(r.value)
+	}
+
+	return option.None[T]()
 }
