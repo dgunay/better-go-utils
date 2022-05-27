@@ -16,6 +16,15 @@ func TestPush(t *testing.T) {
 		s.Push(4)
 		assert.Equal(t, 4, s.Len())
 	})
+
+	t.Run("can push multiple elements", func(t *testing.T) {
+		s := collections.NewStack([]int{1, 2, 3})
+
+		s.Push(4, 5)
+		assert.Equal(t, 5, s.Len())
+		assert.Equal(t, 5, s.Pop().Unwrap())
+		assert.Equal(t, 4, s.Pop().Unwrap())
+	})
 }
 
 func TestPop(t *testing.T) {

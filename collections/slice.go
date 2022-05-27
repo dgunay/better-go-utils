@@ -51,8 +51,8 @@ func (s *Slice[T]) Zeroed() {
 	ZeroOut(s.data)
 }
 
-func (s *Slice[T]) Append(elem T) {
-	s.data = append(s.data, elem)
+func (s *Slice[T]) Append(elem ...T) {
+	s.data = append(s.data, elem...)
 }
 
 func (s Slice[T]) Last() option.Option[T] {

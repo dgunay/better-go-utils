@@ -15,8 +15,8 @@ func (s Stack[T]) Len() int {
 }
 
 // Alias for Append
-func (s *Stack[T]) Push(elem T) {
-	s.slice.Append(elem)
+func (s *Stack[T]) Push(elem ...T) {
+	s.slice.Append(elem...)
 }
 
 func (s *Stack[T]) Pop() option.Option[T] {
