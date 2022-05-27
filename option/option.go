@@ -74,3 +74,19 @@ func (o *Option[T]) Take() Option[T] {
 
 	return out
 }
+
+func (o Option[T]) AndThen(fn func(val T) Option[T]) Option[T] {
+	if o.IsSome() {
+		return fn(o.value)
+	}
+
+	return None[T]()
+}
+
+func (o Option[T]) OrElse(fn func() Option[T]) Option[T] {
+	if o.IsSome() {
+		return o
+	}
+
+	return fn()
+}
