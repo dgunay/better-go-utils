@@ -11,6 +11,8 @@ type Result[T any] struct {
 
 type Nothing any
 
+var Empty = Nothing(nil)
+
 func Wrap[T any](args ...any) Result[T] {
 	val := args[0].(T)
 	err, ok := args[1].(error)
