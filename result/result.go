@@ -19,6 +19,10 @@ func Wrap[T any](args ...any) Result[T] {
 	return Result[T]{value: val, err: err}
 }
 
+func (r Result[T]) Tuple() (T, error) {
+	return r.value, r.err
+}
+
 func Ok[T any](val T) Result[T] {
 	return Result[T]{value: val, err: nil}
 }
