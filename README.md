@@ -10,3 +10,8 @@ work well.
 * Rust-like Option and Result types.
 * Rust-like Into/From interfaces.
 * Promises
+
+## Caveats
+
+* Not really optimized in any meaningful way.
+* Still needs more tests & may have correctness issues.
