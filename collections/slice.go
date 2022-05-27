@@ -1,5 +1,7 @@
 package collections
 
+import "github.com/dgunay/better-go-utils/option"
+
 // Slice wraps a slice and exposes convenient methods for working with it.
 type Slice[T any] struct {
 	data []T
@@ -48,3 +50,32 @@ func (s *Slice[T]) ForEachByRef(fn func(*T)) {
 func (s *Slice[T]) Zeroed() {
 	ZeroOut(s.data)
 }
+
+func (s *Slice[T]) Append(elem T) {
+	s.data = append(s.data, elem)
+}
+
+func (s Slice[T]) Last() option.Option[T] {
+	if s.Empty() {
+		return option.None[T]()
+	}
+
+	return option.Some(s.data[s.Len()-1])
+}
+
+func (s Slice[T]) First() option.Option[T] {
+	if s.Empty() {
+		return option.None[T]()
+	}
+
+	return option.Some(s.data[0])
+}
+
+func (s Slice[T]) Empty() bool {
+	return s.Len() == 0
+}
+
+// TODO: test that this actually deep copies
+// func (s Slice[T]) Copy() Slice[T] {
+// 	return NewSlice(s.data)
+// }
