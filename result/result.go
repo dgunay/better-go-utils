@@ -9,6 +9,8 @@ type Result[T any] struct {
 	err   error
 }
 
+type Nothing any
+
 func Wrap[T any](args ...any) Result[T] {
 	val := args[0].(T)
 	err, ok := args[1].(error)
