@@ -4,7 +4,7 @@ import (
 	"testing"
 
 	"github.com/dgunay/better-go-utils/collections"
-	"github.com/dgunay/better-go-utils/option"
+	"github.com/dgunay/better-go-utils/logic"
 	"github.com/stretchr/testify/assert"
 )
 
@@ -45,6 +45,6 @@ func TestPop(t *testing.T) {
 		assert.Equal(t, 0, s.Len())
 		last := s.Pop()
 		assert.Equal(t, 0, s.Len())
-		assert.Equal(t, option.None[int](), last)
+		assert.Equal(t, logic.None[int](), last)
 	})
 }

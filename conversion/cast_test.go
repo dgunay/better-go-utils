@@ -4,7 +4,7 @@ import (
 	"testing"
 
 	. "github.com/dgunay/better-go-utils/conversion"
-	"github.com/dgunay/better-go-utils/result"
+	. "github.com/dgunay/better-go-utils/logic"
 	"github.com/stretchr/testify/assert"
 )
 
@@ -26,7 +26,7 @@ func TestCast(t *testing.T) {
 	t.Run("Can cast to/from the same type", func(t *testing.T) {
 		t.Parallel()
 
-		assert.Equal(t, result.Ok(1), Cast[int](1))
+		assert.Equal(t, Ok(1), Cast[int](1))
 	})
 
 	t.Run("Can cast interfaces into their underlying implementor", func(t *testing.T) {
@@ -45,6 +45,6 @@ func TestCast(t *testing.T) {
 	t.Run("cannot cast incompatible types", func(t *testing.T) {
 		t.Parallel()
 
-		assert.Equal(t, result.Err[int](ErrInvalidCast("", 1)), Cast[int](""))
+		assert.Equal(t, Err[int](ErrInvalidCast("", 1)), Cast[int](""))
 	})
 }

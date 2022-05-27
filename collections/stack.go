@@ -1,6 +1,6 @@
 package collections
 
-import "github.com/dgunay/better-go-utils/option"
+import "github.com/dgunay/better-go-utils/logic"
 
 type Stack[T any] struct {
 	slice Slice[T]
@@ -19,13 +19,13 @@ func (s *Stack[T]) Push(elem ...T) {
 	s.slice.Append(elem...)
 }
 
-func (s *Stack[T]) Pop() option.Option[T] {
-	return s.slice.Last().AndThen(func(val T) option.Option[T] {
+func (s *Stack[T]) Pop() logic.Option[T] {
+	return s.slice.Last().AndThen(func(val T) logic.Option[T] {
 		s.slice.data = s.slice.data[:len(s.slice.data)-1]
-		return option.Some(val)
+		return logic.Some(val)
 	})
 }
 
-func (s Stack[T]) Top() option.Option[T] {
+func (s Stack[T]) Top() logic.Option[T] {
 	return s.slice.Last()
 }

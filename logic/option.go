@@ -1,9 +1,7 @@
-package option
+package logic
 
 import (
 	"fmt"
-
-	"github.com/dgunay/better-go-utils/result"
 )
 
 type Option[T any] struct {
@@ -47,12 +45,12 @@ func (o Option[T]) Expect(msg string) T {
 	return o.value
 }
 
-func (o Option[T]) OkOr(err error) result.Result[T] {
+func (o Option[T]) OkOr(err error) Result[T] {
 	if o.IsSome() {
-		return result.Ok(o.value)
+		return Ok(o.value)
 	}
 
-	return result.Err[T](err)
+	return Err[T](err)
 }
 
 // Mostly due to limitations in Go generics (methods can't have type params).

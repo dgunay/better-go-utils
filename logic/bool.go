@@ -1,4 +1,4 @@
-package option
+package logic
 
 type Bool bool
 

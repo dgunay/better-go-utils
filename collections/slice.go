@@ -1,6 +1,6 @@
 package collections
 
-import "github.com/dgunay/better-go-utils/option"
+import "github.com/dgunay/better-go-utils/logic"
 
 // Slice wraps a slice and exposes convenient methods for working with it.
 type Slice[T any] struct {
@@ -55,36 +55,36 @@ func (s *Slice[T]) Append(elem ...T) {
 	s.data = append(s.data, elem...)
 }
 
-func (s Slice[T]) Last() option.Option[T] {
+func (s Slice[T]) Last() logic.Option[T] {
 	if s.Empty() {
-		return option.None[T]()
+		return logic.None[T]()
 	}
 
 	return s.At(s.Len() - 1)
 }
 
-func (s Slice[T]) First() option.Option[T] {
+func (s Slice[T]) First() logic.Option[T] {
 	if s.Empty() {
-		return option.None[T]()
+		return logic.None[T]()
 	}
 
-	return option.Some(s.data[0])
+	return logic.Some(s.data[0])
 }
 
 func (s Slice[T]) Empty() bool {
 	return s.Len() == 0
 }
 
-func (s Slice[T]) At(i int) option.Option[T] {
+func (s Slice[T]) At(i int) logic.Option[T] {
 	if i < 0 { // negatives wrap around
 		i = s.Len() + i
 	}
 
 	if i < 0 || i >= s.Len() {
-		return option.None[T]()
+		return logic.None[T]()
 	}
 
-	return option.Some(s.data[i])
+	return logic.Some(s.data[i])
 }
 
 func (s Slice[T]) Reversed() Slice[T] {
