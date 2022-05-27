@@ -60,7 +60,7 @@ func (s Slice[T]) Last() option.Option[T] {
 		return option.None[T]()
 	}
 
-	return option.Some(s.data[s.Len()-1])
+	return s.At(s.Len() - 1)
 }
 
 func (s Slice[T]) First() option.Option[T] {
@@ -73,6 +73,18 @@ func (s Slice[T]) First() option.Option[T] {
 
 func (s Slice[T]) Empty() bool {
 	return s.Len() == 0
+}
+
+func (s Slice[T]) At(i int) option.Option[T] {
+	if i < 0 { // negatives wrap around
+		i = s.Len() + i
+	}
+
+	if i < 0 || i >= s.Len() {
+		return option.None[T]()
+	}
+
+	return option.Some(s.data[i])
 }
 
 // TODO: test that this actually deep copies
