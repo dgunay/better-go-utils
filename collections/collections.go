@@ -41,3 +41,16 @@ func ZeroOut[T any](elems []T) {
 		elems[i] = zero
 	}
 }
+
+func Reverse[T any](elems []T) {
+	for i, j := 0, len(elems)-1; i < j; i, j = i+1, j-1 {
+		elems[i], elems[j] = elems[j], elems[i]
+	}
+}
+
+func Reversed[T any](elems []T) []T {
+	result := make([]T, len(elems))
+	copy(result, elems)
+	Reverse(result)
+	return result
+}

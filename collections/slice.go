@@ -87,7 +87,10 @@ func (s Slice[T]) At(i int) option.Option[T] {
 	return option.Some(s.data[i])
 }
 
-// TODO: test that this actually deep copies
-// func (s Slice[T]) Copy() Slice[T] {
-// 	return NewSlice(s.data)
-// }
+func (s Slice[T]) Reversed() Slice[T] {
+	return NewSlice(Reversed(s.data))
+}
+
+func (s *Slice[T]) Reverse() {
+	Reverse(s.data)
+}
