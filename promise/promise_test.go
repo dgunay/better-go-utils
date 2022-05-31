@@ -20,7 +20,7 @@ func TestPromise(t *testing.T) {
 
 	t.Run("happy path", func(t *testing.T) {
 		p := promise.New(success)
-		require.Eventually(t, func() bool { return p.Ready() }, time.Second, time.Millisecond*50)
+		require.Eventually(t, func() bool { return bool(p.Ready()) }, time.Second, time.Millisecond*50)
 		val, err := p.Await()
 		require.NoError(t, err)
 		require.Equal(t, "success", val)
@@ -28,7 +28,7 @@ func TestPromise(t *testing.T) {
 
 	t.Run("error path", func(t *testing.T) {
 		p := promise.New(failure)
-		require.Eventually(t, func() bool { return p.Ready() }, time.Second, time.Millisecond*50)
+		require.Eventually(t, func() bool { return bool(p.Ready()) }, time.Second, time.Millisecond*50)
 		val, err := p.Await()
 		require.Error(t, err)
 		require.Equal(t, "", val)
