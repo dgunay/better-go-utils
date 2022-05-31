@@ -1,6 +1,7 @@
 package promise_test
 
 import (
+	"context"
 	"fmt"
 	"testing"
 	"time"
@@ -10,11 +11,11 @@ import (
 )
 
 func TestPromise(t *testing.T) {
-	success := func() (string, error) {
+	success := func(context.Context) (string, error) {
 		return "success", nil
 	}
 
-	failure := func() (string, error) {
+	failure := func(context.Context) (string, error) {
 		return "", fmt.Errorf("failure")
 	}
 
@@ -32,6 +33,34 @@ func TestPromise(t *testing.T) {
 		val, err := p.Await()
 		require.Error(t, err)
 		require.Equal(t, "", val)
+	})
+
+	t.Run("cancelling the promise", func(t *testing.T) {
+		failWhenCanceled := func(ctx context.Context) (string, error) {
+			for {
+				select {
+				case <-ctx.Done():
+					return "", fmt.Errorf("cancelled")
+				case <-time.After(time.Second):
+					return "success", nil
+				}
+			}
+		}
+
+		// Cancel the promise
+		p := promise.New(failWhenCanceled)
+		p.Cancel()
+		require.Eventually(t, func() bool { return bool(p.Ready()) }, time.Second*2, time.Millisecond*50)
+		val, err := p.Await()
+		require.ErrorContains(t, err, "cancelled")
+		require.Equal(t, "", val)
+
+		// Don't cancel
+		p = promise.New(failWhenCanceled)
+		require.Eventually(t, func() bool { return bool(p.Ready()) }, time.Second*2, time.Millisecond*50)
+		val, err = p.Await()
+		require.NoError(t, err)
+		require.Equal(t, "success", val)
 	})
 
 	// TODO: implement chaining thens

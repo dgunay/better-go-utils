@@ -1,18 +1,28 @@
 package promise
 
-import "github.com/dgunay/better-go-utils/logic"
+import (
+	"context"
+
+	"github.com/dgunay/better-go-utils/logic"
+)
 
 type Promise[T any] struct {
 	channel chan T
 	errch   chan error
 	ready   bool
+	cancel  context.CancelFunc
 }
 
-func New[T any](fn func() (T, error)) *Promise[T] {
+// The passed context's Done channel is used to cancel the promise.
+type PromiseFunc[T any] func(context.Context) (T, error)
+
+func New[T any](fn PromiseFunc[T]) *Promise[T] {
 	p := &Promise[T]{channel: make(chan T, 1), errch: make(chan error, 1)}
 
+	ctx := context.Background()
+	ctx, p.cancel = context.WithCancel(ctx)
 	go func() {
-		val, err := fn()
+		val, err := fn(ctx)
 		if err != nil {
 			p.errch <- err
 		} else {
@@ -38,4 +48,10 @@ func (p Promise[T]) Await() (T, error) {
 			return none, err
 		}
 	}
+}
+
+// Sends a cancellation/Done() to the context passed to the PromiseFunc. It is
+// up to the callback to respond to the cancellation.
+func (p Promise[T]) Cancel() {
+	p.cancel()
 }
